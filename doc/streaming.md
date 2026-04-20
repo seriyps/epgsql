@@ -139,7 +139,15 @@ handle_x_log_data(StartLSN, EndLSN, Data, CbState) ->
     
     Otherwise (if you do not load all data from tables during erlang app startup) 
     it is not recommended to set align_lsn to true. In this case to stop PG server stop epgsql replication first.
-    
+
+* **standby_status_update_interval** - Default - 0.
+  
+    Send `Standby status update` after `Primary keepalive message` if the last `Standby status update` 
+    was more than this value milliseconds ago.
+    If the value equal "0" then send `Standby status update` after each `Primary keepalive message`.
+    If the value equal "-1" then send `Standby status update` after `Primary keepalive message` 
+    only if it has reply required flag.
+
 ## Flow control
 
 It is possible to set `{socket_active, N}` on a [TCP](https://www.erlang.org/doc/man/inet.html#setopts-2)

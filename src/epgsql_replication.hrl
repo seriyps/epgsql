@@ -7,5 +7,7 @@
           cbmodule :: module() | undefined,
           cbstate :: any() | undefined,
           receiver :: pid() | undefined,
-          align_lsn :: boolean() | undefined
+          align_lsn :: boolean() | undefined,
+          standby_status_update_interval = 0 :: integer(),
+          last_standby_status_update_time = 0 :: integer()
         }).

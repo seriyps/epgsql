@@ -550,12 +550,21 @@ handle_x_log_data(Mod, StartLSN, EndLSN, WALRecord, Repl) ->
     Mod:handle_x_log_data(StartLSN, EndLSN, WALRecord, Repl).
 
 -type replication_option() ::
-    {align_lsn, boolean()}. %% Align last applied and flushed LSN with last received LSN
-                            %%  after Primary keepalive message with ReplyRequired flag
+    {align_lsn, boolean()} | %% Align last applied and flushed LSN with last received LSN
+                              %%  after Primary keepalive message with ReplyRequired flag
+    {standby_status_update_interval, integer()}. %% Send STANDBY_STATUS_UPDATE after
+                                                 %% PRIMARY_KEEPALIVE_MESSAGE
+                                                 %% if the last STANDBY_STATUS_UPDATE was more than
+                                                 %% this value milliseconds ago.
+                                                 %% If 0 then send STANDBY_STATUS_UPDATE after
+                                                 %% each PRIMARY_KEEPALIVE_MESSAGE.
+                                                 %% If -1 then send STANDBY_STATUS_UPDATE after
+                                                 %% PRIMARY_KEEPALIVE_MESSAGE only if it has reply required flag
 
 -type replication_opts() ::
     [replication_option()]
-    | #{align_lsn => boolean()}.
+    | #{align_lsn => boolean(),
+        standby_status_update_interval => integer()}.
 
 -spec start_replication(connection(), string(), Callback, cb_state(), string(), string(), replication_opts()) ->
     Response when
